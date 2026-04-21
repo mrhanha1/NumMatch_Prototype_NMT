@@ -24,7 +24,7 @@ public class CellSelectionHandler
         {
             _selected = cellView;
             cellView.SetSelected(true);
-            Debug.Log($"Selected cell at ({cellView.Model.Row}, {cellView.Model.Col}) with value {cellView.Model.Value}");
+            //Debug.Log($"Selected cell at ({cellView.Model.Row}, {cellView.Model.Col}) with value {cellView.Model.Value}");
             return;
         }
 
@@ -32,7 +32,7 @@ public class CellSelectionHandler
         {
             cellView.SetSelected(false);
             _selected = null;
-            Debug.Log($"Deselected cell at ({cellView.Model.Row}, {cellView.Model.Col})");
+            //Debug.Log($"Deselected cell at ({cellView.Model.Row}, {cellView.Model.Col})");
             return;
         }
         //neu da co cell duoc chon va bam vao cell khac

@@ -12,6 +12,7 @@ public class GameplayPanel : BasePanel
     [SerializeField] private Button backButton;
     [SerializeField] private Button forceWinButton;
     [SerializeField] private Button forceLoseButton;
+    [SerializeField] private Button addNumberButton;
 
     [Inject]
     public void Construct(GameController gameController, UIService uIService, GameResultService gameResultService)
@@ -31,5 +32,6 @@ public class GameplayPanel : BasePanel
         forceWinButton.onClick.AddListener(() =>  _gameResultService.TriggerWin());
         forceLoseButton.onClick.AddListener(() => _gameResultService.TriggerLose());
         backButton.onClick.AddListener(() => _uiService.PopPanel());
+        addNumberButton.onClick.AddListener(() => _gameController.StartGame());
     }
 }
