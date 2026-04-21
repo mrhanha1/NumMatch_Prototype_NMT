@@ -1,18 +1,21 @@
+﻿using System.Text;
+using UnityEngine;
 public static class  AddNumber
 {
-    public static void AddNumberInMap(CellModel[,] board )
+    public static string FindActivedCells(CellModel[,]board)
     {
-        int rows = board.GetLength(0);
-        int cols = board.GetLength(1);
-        for (int r = 0; r < rows; r++)
-        {
-            for (int c = 0; c < cols; c++)
+        StringBuilder sb = new();
+        for (int r=0; r < board.GetLength(0); r++)
+            for (int c = 0; c < board.GetLength(1); c++)
             {
                 if (board[r, c].IsActive)
+                    sb.Append(board[r, c].Value);
+                else if (board[r, c].Value == 0)
                 {
-                    board[r, c].Value += 1;
+                    Debug.Log($"All active cells is {sb.ToString()}");
+                    return sb.ToString();
                 }
             }
-        }
+        return sb.ToString();
     }
 }

@@ -32,6 +32,6 @@ public class GameplayPanel : BasePanel
         forceWinButton.onClick.AddListener(() =>  _gameResultService.TriggerWin());
         forceLoseButton.onClick.AddListener(() => _gameResultService.TriggerLose());
         backButton.onClick.AddListener(() => _uiService.PopPanel());
-        addNumberButton.onClick.AddListener(() => _gameController.StartGame());
+        addNumberButton.onClick.AddListener(() => _gameController.AddNumbers());
     }
 }

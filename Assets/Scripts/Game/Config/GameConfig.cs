@@ -4,5 +4,5 @@ using UnityEngine;
 public class GameConfig : ScriptableObject
 {
     public int column = 9;
-    public int row = 20;
+    public int row = 100;
 }
