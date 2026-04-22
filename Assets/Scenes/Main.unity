@@ -2598,7 +2598,7 @@ GameObject:
   - component: {fileID: 915195253}
   - component: {fileID: 915195252}
   m_Layer: 5
-  m_Name: StageText (Legacy)
+  m_Name: StageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4355,7 +4355,7 @@ GameObject:
   - component: {fileID: 1455784212}
   - component: {fileID: 1455784211}
   m_Layer: 5
-  m_Name: AddNumberCount
+  m_Name: AddNumberCountText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5040,6 +5040,8 @@ MonoBehaviour:
   forceWinButton: {fileID: 624916388}
   forceLoseButton: {fileID: 1897206340}
   addNumberButton: {fileID: 627759487}
+  stageText: {fileID: 915195252}
+  AddNumberCountText: {fileID: 1455784211}
 --- !u!114 &1686012268
 MonoBehaviour:
   m_ObjectHideFlags: 0

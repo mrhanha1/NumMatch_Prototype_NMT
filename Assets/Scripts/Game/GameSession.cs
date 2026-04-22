@@ -7,24 +7,17 @@ public class GameSession
     public int AddNumberCount { get; set; }
     public CellModel[,] Board { get; private set; }
     public bool IsWin { get; set; }
+    public event System.Action OnStageChanged;
+    public event System.Action OnAddNumberCountChanged;
+    public void TriggerStageChanged() => OnStageChanged?.Invoke();
+    public void TriggerAddNumberCountChanged() => OnAddNumberCountChanged?.Invoke();
 
     private readonly GameConfig _config;
-
     public GameSession(GameConfig config)
     {
         _config = config;
     }
 
-    private List<int> ParseNumberString(string numberString)
-    {
-        var numbers = new List<int>();
-        foreach (char c in numberString)
-        {
-            if (int.TryParse(c.ToString(), out int n))
-                numbers.Add(n);
-        }
-        return numbers;
-    }
 
     public void Reset(string numberString)
     {
@@ -40,11 +33,13 @@ public class GameSession
                 Board[r, c] = new CellModel(r,c,0);
 
         InsertNumber(Board,numberString,0,0);
+        OnStageChanged?.Invoke();
+        OnAddNumberCountChanged?.Invoke();
     }
 
     public void InsertNumber(CellModel[,] board, string numberString, int startRow = 0, int startCol = 0)
     {
-        var numbers = ParseNumberString(numberString);
+        var numbers = AddNumber.ParseNumberString(numberString);
         int rows = _config.row;
         int cols = _config.column;
         int i = 0;
@@ -65,7 +60,6 @@ public class GameSession
     {
         Board = newBoard;
     }
-
     public bool IsAllCleared()
     {
         int rows = _config.row;
