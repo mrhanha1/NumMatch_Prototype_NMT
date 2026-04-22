@@ -35,7 +35,7 @@ public class MatchHandler
 
         OnMatchSuccess?.Invoke(a.Model, b.Model);
 
-        //_collapser.Collapse(); // auto collapse sau mỗi match
+        _collapser.Collapse(); // auto collapse sau mỗi match
         _resultService.CheckResult();
         return true;
     }

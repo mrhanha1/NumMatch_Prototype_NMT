@@ -47,6 +47,7 @@ public class CellView : MonoBehaviour
     {
         Model.IsSelected = selected;
         selectedHighlight.SetActive(selected);
+        _audioService.PlaySFX("choose");
     }
     public void SetGemType(int type)
     {
@@ -58,7 +59,6 @@ public class CellView : MonoBehaviour
     private void OnClick()
     {
         if (!Model.IsActive) return;
-        _audioService.PlaySFX("choose");
         _selectionHandler.OnCellClicked(this);
     }
 }

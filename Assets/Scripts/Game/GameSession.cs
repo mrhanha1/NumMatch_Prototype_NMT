@@ -2,6 +2,7 @@
 
 public class GameSession
 {
+    public bool GemMode { get; set; } = false;
     public int Score { get; set; }
     public int Stage { get; set; }
     public int AddNumberCount { get; set; }

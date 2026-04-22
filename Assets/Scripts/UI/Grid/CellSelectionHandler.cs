@@ -19,7 +19,7 @@ public class CellSelectionHandler
 
     public void OnCellClicked(CellView cellView)
     {
-
+        if (cellView.Model.Value <= 0 || !cellView.Model.IsActive) return;
         if (_selected == null) // neu chua co cell nao duoc chon thi chon cell vua bam
         {
             _selected = cellView;

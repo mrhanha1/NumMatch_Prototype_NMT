@@ -12,39 +12,49 @@ public class BoardCollapser
         _session = session;
         _gridView = gridView;
     }
-
     public bool Collapse()
     {
         var board = _session.Board;
         int rows = board.GetLength(0);
         int cols = board.GetLength(1);
 
-        var activeRows = new List<CellModel[]>();
+        // Tìm các hàng cần xóa (toàn bộ IsActive == false)
+        var rowsToRemove = new List<int>();
         for (int r = 0; r < rows; r++)
         {
-            bool anyActive = false;
+            bool allInactive = true;
             for (int c = 0; c < cols; c++)
-                if (board[r, c].IsActive) { anyActive = true; break; }
-            if (anyActive)
-            {
-                var row = new CellModel[cols];
-                for (int c = 0; c < cols; c++) row[c] = board[r, c];
-                activeRows.Add(row);
-            }
+                if (board[r, c].IsActive) { allInactive = false; break; }
+            if (allInactive) rowsToRemove.Add(r);
         }
 
-        if (activeRows.Count == rows) return false;
+        if (rowsToRemove.Count == 0) return false;
 
-        var newBoard = new CellModel[activeRows.Count, cols];
-        for (int r = 0; r < activeRows.Count; r++)
+        // Copy hàng active lên đè hàng inactive (từ trên xuống)
+        int writeRow = 0;
+        for (int r = 0; r < rows; r++)
+        {
+            if (rowsToRemove.Contains(r)) continue;
+            if (writeRow != r)
+                for (int c = 0; c < cols; c++)
+                {
+                    board[writeRow, c].Value = board[r, c].Value;
+                    board[writeRow, c].IsActive = board[r, c].IsActive;
+                    board[writeRow, c].GemType = board[r, c].GemType;
+                }
+            writeRow++;
+        }
+
+        // Reset các hàng dưới cùng bị duplicate
+        for (int r = rows - rowsToRemove.Count; r < rows; r++)
             for (int c = 0; c < cols; c++)
             {
-                newBoard[r, c] = activeRows[r][c];
-                newBoard[r, c].SetPosition(r, c);
+                board[r, c].Value = 0;
+                board[r, c].IsActive = true;
+                board[r, c].GemType = 0;
             }
 
-        _session.SetBoard(newBoard);
-        _gridView.BuildGrid(_session.Board);
+        _gridView.BuildGrid(board);
         return true;
     }
 }

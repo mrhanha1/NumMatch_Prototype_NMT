@@ -303,9 +303,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a2a8a2f5b86bc6949966ab17961c9ad2, type: 3}
   - {fileID: 21300000, guid: f64e16e50a7e8bf42abb54ec03b60145, type: 3}
   - {fileID: 21300000, guid: 208f12fc88947db48996b8291c3b149d, type: 3}
+  gemSprites: []
   numImg: {fileID: 7615908854525522674}
   matchedOverlay: {fileID: 1775884130746406435}
   selectedHighlight: {fileID: 7645426009520692226}
+  gemBG: {fileID: 7601810286137510672}
 --- !u!1 &7600510287475410235
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,7 +481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8157773739163469556
 RectTransform:
   m_ObjectHideFlags: 0

@@ -14,7 +14,14 @@ public class GameController
 
     public void StartGame()
     {
-        string input = StageGenerator.GenerateStage(32, targetPairCount:1);
+        string input = StageGenerator.GenerateStage(32, targetPairCount:3);
+        _session.Stage = 1;
+        _session.Reset(input);
+        _gridView.BuildGrid(_session.Board);
+    }
+    public void StartGemMode()
+    {
+        string input = StageGenerator.GenerateStage(32, targetPairCount: 3);
         _session.Stage = 1;
         _session.Reset(input);
         _gridView.BuildGrid(_session.Board);
