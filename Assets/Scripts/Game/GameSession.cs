@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
 public class GameSession
 {
     public bool GemMode { get; set; } = false;
+    public Dictionary<int, int> GemRequired { get; set; }
+    public Dictionary<int, int> GemCollected { get; set; }
     public int Score { get; set; }
     public int Stage { get; set; }
     public int AddNumberCount { get; set; }
@@ -40,18 +43,22 @@ public class GameSession
 
     public void InsertNumber(CellModel[,] board, string numberString, int startRow = 0, int startCol = 0)
     {
-        var numbers = AddNumber.ParseNumberString(numberString);
+        var numList = AddNumber.ParseNumberString(numberString);
+        var gemList = GemGenerator.GenerateGemList(numberString, GemRequired, GemCollected);
         int rows = _config.row;
         int cols = _config.column;
         int i = 0;
 
-        for (int r = startRow; r < rows && i < numbers.Count; r++)
+        for (int r = startRow; r < rows && i < numList.Count; r++)
         {
             int cStart = (r == startRow) ? startCol : 0;
-            for (int c = cStart; c < cols && i < numbers.Count; c++)
+            for (int c = cStart; c < cols && i < numList.Count; c++)
             {
-                if (board[r, c].Value == 0 && numbers[i] != 0)
-                    board[r, c].Value = numbers[i];
+                if (board[r, c].Value == 0 && numList[i] != 0)
+                {
+                    board[r, c].Value = numList[i];
+                    if (GemMode) board[r, c].GemType = gemList[i];
+                }
                 i++;
             }
         }
@@ -63,10 +70,8 @@ public class GameSession
     }
     public bool IsAllCleared()
     {
-        int rows = _config.row;
-        int cols = _config.column;
-        for (int r = 0; r < rows; r++)
-            for (int c = 0; c < cols; c++)
+        for (int r = 0; r < 3; r++)
+            for (int c = 0; c < Board.GetLength(1); c++)
                 if (Board[r, c].IsActive) return false;
         return true;
     }

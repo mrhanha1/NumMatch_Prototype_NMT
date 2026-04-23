@@ -18,8 +18,24 @@ public class GameResultService
 
     public void CheckResult()
     {
-        if (_session.IsAllCleared())
-            TriggerWin();
+        var activeCells = AddNumber.ParseNumberString(AddNumber.FindActivedCells(_session.Board));
+        var pairs = StageGenerator.FindAllPairs(activeCells);
+
+        if (_session.GemMode)
+        {
+            if (IsGemComplete()) TriggerWin();
+            else if (_session.AddNumberCount == 0 && pairs.Count == 0) TriggerLose();
+        }
+        else
+        {
+            if (_session.AddNumberCount == 0 && pairs.Count == 0) TriggerWin();
+        }
+    }
+    private bool IsGemComplete()
+    {
+        foreach (var kvp in _session.GemRequired)
+            if (_session.GemCollected[kvp.Key] < kvp.Value) return false;
+        return true;
     }
 
     public void TriggerWin()

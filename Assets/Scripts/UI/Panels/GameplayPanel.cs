@@ -8,6 +8,7 @@ public class GameplayPanel : BasePanel
     private GameResultService _gameResultService;
     private UIService _uiService;
     private GameSession _session;
+    private BoardCollapser _collapser;
 
 
     [SerializeField] private Button backButton;
@@ -18,12 +19,15 @@ public class GameplayPanel : BasePanel
     [SerializeField] private Text AddNumberCountText;
 
     [Inject]
-    public void Construct(GameController gameController, UIService uIService, GameResultService gameResultService, GameSession gameSession)
+    public void Construct(GameController gameController,
+        UIService uIService, GameResultService gameResultService, GameSession gameSession,
+        BoardCollapser collapser)
     {
         _gameController = gameController;
         _uiService = uIService;
         _gameResultService = gameResultService;
         _session = gameSession;
+        _collapser = collapser;
     }
 
     public override void Show()
@@ -33,7 +37,14 @@ public class GameplayPanel : BasePanel
     }
     private new void Awake()
     {
-        forceWinButton.onClick.AddListener(() =>  _gameResultService.TriggerWin());
+        forceWinButton.onClick.AddListener(() =>
+            {
+                for (int i = 0; i < _session.Board.GetLength(0); i++)
+                    for (int j = 0; j < _session.Board.GetLength(1); j++)
+                        _session.Board[i, j].IsActive = false;
+                _collapser.Collapse();
+                _gameResultService.CheckResult();
+            });
         forceLoseButton.onClick.AddListener(() => _gameResultService.TriggerLose());
         backButton.onClick.AddListener(() => _uiService.PopPanel());
         addNumberButton.onClick.AddListener(() => _gameController.AddNumbers());
@@ -50,4 +61,5 @@ public class GameplayPanel : BasePanel
     }
     private void UpdateStageText() => stageText.text = $"Stage: {_session.Stage}";
     private void UpdateAddNumberCountText() => AddNumberCountText.text = $"{_session.AddNumberCount}";
+
 }

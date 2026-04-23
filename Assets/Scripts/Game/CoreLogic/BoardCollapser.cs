@@ -5,12 +5,14 @@ public class BoardCollapser
 {
     private readonly GameSession _session;
     private readonly GridView _gridView;
+    private readonly AudioService _audioService;
 
     [Inject]
-    public BoardCollapser(GameSession session, GridView gridView)
+    public BoardCollapser(GameSession session, GridView gridView, AudioService audioService)
     {
         _session = session;
         _gridView = gridView;
+        _audioService = audioService;
     }
     public bool Collapse()
     {
@@ -18,7 +20,7 @@ public class BoardCollapser
         int rows = board.GetLength(0);
         int cols = board.GetLength(1);
 
-        // Tìm các hàng cần xóa (toàn bộ IsActive == false)
+        // Tìm các hàng cần xóa (toàn bộ cell IsActive == false)
         var rowsToRemove = new List<int>();
         for (int r = 0; r < rows; r++)
         {
@@ -29,7 +31,7 @@ public class BoardCollapser
         }
 
         if (rowsToRemove.Count == 0) return false;
-
+        _audioService.PlaySFX("clear");
         // Copy hàng active lên đè hàng inactive (từ trên xuống)
         int writeRow = 0;
         for (int r = 0; r < rows; r++)

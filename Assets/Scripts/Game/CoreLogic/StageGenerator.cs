@@ -15,8 +15,7 @@ public static class StageGenerator
         return string.Concat(list.Select(v => v.ToString()));
     }
 
-
-    private static List<(int, int)> FindAllPairs(List<int> list)
+    public static List<(int, int)> FindAllPairs(List<int> list)
     {
         int[] offsets = { 1, 8, 9, 10 };
         int n = list.Count;

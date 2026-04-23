@@ -14,3 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   column: 9
   row: 20
+  numberSprites:
+  - {fileID: 0}
+  - {fileID: 21300000, guid: 7e620b35f9f2f8e48a243a5ca296f9fb, type: 3}
+  - {fileID: 21300000, guid: 282f317229559f243b7f15c225f1c771, type: 3}
+  - {fileID: 21300000, guid: 35e86198e6a2c4443bae7fdd55c98478, type: 3}
+  - {fileID: 21300000, guid: e68afce943cb6814a97d3956fb446d2f, type: 3}
+  - {fileID: 21300000, guid: e6f08821ab7dd0d469eb36c2e228c97c, type: 3}
+  - {fileID: 21300000, guid: 69f6514ae8dc88646b56101f4558434d, type: 3}
+  - {fileID: 21300000, guid: a2a8a2f5b86bc6949966ab17961c9ad2, type: 3}
+  - {fileID: 21300000, guid: f64e16e50a7e8bf42abb54ec03b60145, type: 3}
+  - {fileID: 21300000, guid: 208f12fc88947db48996b8291c3b149d, type: 3}
+  gemSprites:
+  - {fileID: 0}
+  - {fileID: 21300000, guid: c8a7ee3e07dcae84ca6d7fb18467d2ff, type: 3}
+  - {fileID: 21300000, guid: 868a0d40e0ec0f64998e02a379ab0c7b, type: 3}
+  - {fileID: 21300000, guid: 61660129cb1e30c4e9f2ee5b1189781b, type: 3}

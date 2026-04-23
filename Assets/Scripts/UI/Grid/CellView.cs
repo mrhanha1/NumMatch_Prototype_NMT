@@ -6,8 +6,6 @@ using VContainer;
 public class CellView : MonoBehaviour
 {
     [SerializeField] private Button btn;
-    [SerializeField] private List<Sprite> numberSprites;
-    [SerializeField] private List<Sprite> gemSprites;
     [SerializeField] private Image numImg;
     [SerializeField] private GameObject matchedOverlay;
     [SerializeField] private GameObject selectedHighlight;
@@ -17,12 +15,14 @@ public class CellView : MonoBehaviour
 
     private AudioService _audioService;
     private CellSelectionHandler _selectionHandler;
+    private GameConfig _config;
 
     [Inject]
-    public void Construct(AudioService audioService, CellSelectionHandler selectionHandler)
+    public void Construct(AudioService audioService, CellSelectionHandler selectionHandler, GameConfig gameConfig)
     {
         _audioService = audioService;
         _selectionHandler = selectionHandler;
+        _config = gameConfig;
     }
 
     public void Init(CellModel model)
@@ -40,7 +40,7 @@ public class CellView : MonoBehaviour
         else SetGemType(Model.GemType);
 
         numImg.gameObject.SetActive(Model.Value > 0);
-        if (Model.Value > 0) numImg.sprite = numberSprites[Model.Value];
+        if (Model.Value > 0) numImg.sprite = _config.numberSprites[Model.Value];
     }
 
     public void SetSelected(bool selected)
@@ -53,7 +53,7 @@ public class CellView : MonoBehaviour
     {
         if (type <= 0) return;
         gemBG.gameObject.SetActive(true);
-        gemBG.sprite = gemSprites[type];
+        gemBG.sprite = _config.gemSprites[type];
         Model.GemType = type;
     }
     private void OnClick()

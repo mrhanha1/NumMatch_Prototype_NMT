@@ -31,6 +31,11 @@ public class MatchHandler
         a.Model.IsActive = false;
         b.Model.IsActive = false;
         _session.Score += 2;
+        if (_session.GemMode)
+        {
+            if (a.Model.GemType > 0) _session.GemCollected[a.Model.GemType]++;
+            if (b.Model.GemType > 0) _session.GemCollected[b.Model.GemType]++;
+        }
         _audioService.PlaySFX("pair");
 
         OnMatchSuccess?.Invoke(a.Model, b.Model);
