@@ -6,22 +6,25 @@ public class BoardCollapser
     private readonly GameSession _session;
     private readonly GridView _gridView;
     private readonly AudioService _audioService;
+    private readonly GameController _gameController;
 
     [Inject]
-    public BoardCollapser(GameSession session, GridView gridView, AudioService audioService)
+    public BoardCollapser(GameSession session, GridView gridView, AudioService audioService, GameController gameController)
     {
         _session = session;
         _gridView = gridView;
         _audioService = audioService;
+        _gameController = gameController;
     }
+
     public bool Collapse()
     {
         var board = _session.Board;
         int rows = board.GetLength(0);
         int cols = board.GetLength(1);
 
-        // Tìm các hàng cần xóa (toàn bộ cell IsActive == false)
-        var rowsToRemove = new List<int>();
+        // Find rows to remove (all cells inactive = fully matched)
+        var rowsToRemove = new HashSet<int>();
         for (int r = 0; r < rows; r++)
         {
             bool allInactive = true;
@@ -31,8 +34,10 @@ public class BoardCollapser
         }
 
         if (rowsToRemove.Count == 0) return false;
+
         _audioService.PlaySFX("clear");
-        // Copy hàng active lên đè hàng inactive (từ trên xuống)
+
+        // Shift active rows up to fill removed rows
         int writeRow = 0;
         for (int r = 0; r < rows; r++)
         {
@@ -47,7 +52,7 @@ public class BoardCollapser
             writeRow++;
         }
 
-        // Reset các hàng dưới cùng bị duplicate
+        // Reset bottom rows that were duplicated
         for (int r = rows - rowsToRemove.Count; r < rows; r++)
             for (int c = 0; c < cols; c++)
             {
@@ -57,6 +62,13 @@ public class BoardCollapser
             }
 
         _gridView.BuildGrid(board);
+
+        // Auto advance to next stage when top 3 rows are all empty (board cleared)
+        if (_session.IsBoardCleared())
+        {
+            _gameController.NextStage();
+        }
+
         return true;
     }
 }

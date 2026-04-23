@@ -3,18 +3,27 @@ using UnityEngine;
 
 public static class GemGenerator
 {
-    public static List<int> GenerateGemList(string numberString, Dictionary<int, int> gemRequired, Dictionary<int, int> gemCollected)
+    /// <summary>
+    /// Generates gem assignments for the given number string.
+    /// Only gem types with gemRequired[key] > 0 are candidates.
+    /// </summary>
+    public static List<int> GenerateGemList(string numberString, Dictionary<int, int> gemRequired)
     {
         var numbers = AddNumber.ParseNumberString(numberString);
         var gemList = new List<int>(new int[numbers.Count]);
+
+        if (gemRequired == null || gemRequired.Count == 0)
+            return gemList;
 
         float X = Random.Range(5f, 7f);
         int Y = Mathf.CeilToInt((numbers.Count + 1) / 2f);
 
         var availableGemTypes = new List<int>();
         foreach (var kvp in gemRequired)
-            if (gemCollected[kvp.Key] < kvp.Value)
+            if (kvp.Value > 0)
                 availableGemTypes.Add(kvp.Key);
+
+        if (availableGemTypes.Count == 0) return gemList;
 
         int Z = availableGemTypes.Count;
         int gemCountThisRound = 0;

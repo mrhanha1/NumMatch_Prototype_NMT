@@ -16,37 +16,54 @@ public class GameResultService
         _losePopup = losePopup;
     }
 
+    /// <summary>
+    /// Call after every match or board change to evaluate game state.
+    ///
+    /// GemMode:
+    ///   Win  — all GemRequired fully collected (each value <= 0)
+    ///   Lose — AddNumberCount <= 0 AND no valid moves AND gems NOT all collected
+    ///
+    /// Non-GemMode (and GemMode path for complete):
+    ///   Complete — AddNumberCount <= 0 AND no valid moves → show WinPopup
+    /// </summary>
     public void CheckResult()
     {
-        var activeCells = AddNumber.ParseNumberString(AddNumber.FindActivedCells(_session.Board));
-        var pairs = StageGenerator.FindAllPairs(activeCells);
-
         if (_session.GemMode)
         {
-            if (IsGemComplete()) TriggerWin();
-            else if (_session.AddNumberCount == 0 && pairs.Count == 0) TriggerLose();
+            if (_session.AreAllGemsCollected())
+            {
+                TriggerWin();
+                return;
+            }
+
+            if (_session.AddNumberCount <= 0 && !_session.HasValidMoves())
+            {
+                TriggerLose();
+                return;
+            }
         }
         else
         {
-            if (_session.AddNumberCount == 0 && pairs.Count == 0) TriggerWin();
+            if (_session.AddNumberCount <= 0 && !_session.HasValidMoves())
+            {
+                TriggerComplete();
+            }
         }
-    }
-    private bool IsGemComplete()
-    {
-        foreach (var kvp in _session.GemRequired)
-            if (_session.GemCollected[kvp.Key] < kvp.Value) return false;
-        return true;
     }
 
     public void TriggerWin()
     {
-        _session.IsWin = true;
         _uiService.ShowPopup(_winPopup);
     }
 
     public void TriggerLose()
     {
-        _session.IsWin = false;
         _uiService.ShowPopup(_losePopup);
+    }
+
+    /// <summary>No valid moves left and add-number exhausted → show WinPopup as stage complete.</summary>
+    public void TriggerComplete()
+    {
+        _uiService.ShowPopup(_winPopup);
     }
 }

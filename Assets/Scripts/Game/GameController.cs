@@ -14,20 +14,21 @@ public class GameController
 
     public void StartGame()
     {
-        string input = StageGenerator.GenerateStage(32, targetPairCount:3);
+        string input = StageGenerator.GenerateStage(32, targetPairCount: 3);
         _session.Stage = 1;
         _session.Reset(input);
         _gridView.BuildGrid(_session.Board);
     }
+
     public void SetGemMode(bool isGemMode)
     {
         _session.GemMode = isGemMode;
         if (isGemMode)
         {
             _session.GemRequired = new() { { 1, 5 }, { 2, 5 }, { 3, 5 } };
-            _session.GemCollected = new() { { 1, 0 }, { 2, 0 }, { 3, 0 } };
         }
     }
+
     public void NextStage()
     {
         string input = string.Empty;
@@ -43,6 +44,7 @@ public class GameController
     }
 
     public void Restart() => StartGame();
+
     public void AddNumbers()
     {
         AddNumber.Execute(_session, _gridView);

@@ -31,16 +31,25 @@ public class MatchHandler
         a.Model.IsActive = false;
         b.Model.IsActive = false;
         _session.Score += 2;
+
         if (_session.GemMode)
         {
-            if (a.Model.GemType > 0) _session.GemCollected[a.Model.GemType]++;
-            if (b.Model.GemType > 0) _session.GemCollected[b.Model.GemType]++;
+            if (a.Model.GemType > 0)
+            {
+                _session.GemRequired[a.Model.GemType] = Math.Max(0, _session.GemRequired[a.Model.GemType] - 1);
+                _session.TriggerGemRequiredChanged();
+            }
+            if (b.Model.GemType > 0)
+            {
+                _session.GemRequired[b.Model.GemType] = Math.Max(0, _session.GemRequired[b.Model.GemType] - 1);
+                _session.TriggerGemRequiredChanged();
+            }
         }
-        _audioService.PlaySFX("pair");
 
+        _audioService.PlaySFX("pair");
         OnMatchSuccess?.Invoke(a.Model, b.Model);
 
-        _collapser.Collapse(); // auto collapse sau mỗi match
+        _collapser.Collapse();
         _resultService.CheckResult();
         return true;
     }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-public static class  AddNumber
+
+public static class AddNumber
 {
     public static void Execute(GameSession session, GridView gridView)
     {
@@ -11,7 +11,7 @@ public static class  AddNumber
         session.AddNumberCount--;
         string activeCells = FindActivedCells(session.Board);
 
-        // Tìm vị trí đầu tiên chưa có value
+        // Find first empty slot and insert active cells there
         for (int r = 0; r < session.Board.GetLength(0); r++)
             for (int c = 0; c < session.Board.GetLength(1); c++)
                 if (session.Board[r, c].Value == 0)
@@ -21,22 +21,21 @@ public static class  AddNumber
                     return;
                 }
     }
-    public static string FindActivedCells(CellModel[,]board)
+
+    public static string FindActivedCells(CellModel[,] board)
     {
         StringBuilder sb = new();
-        for (int r=0; r < board.GetLength(0); r++)
+        for (int r = 0; r < board.GetLength(0); r++)
             for (int c = 0; c < board.GetLength(1); c++)
             {
                 if (board[r, c].IsActive)
                     sb.Append(board[r, c].Value);
                 else if (board[r, c].Value == 0)
-                {
-                    Debug.Log($"All active cells is {sb.ToString()}");
                     return sb.ToString();
-                }
             }
         return sb.ToString();
     }
+
     public static List<int> ParseNumberString(string numberString)
     {
         var numbers = new List<int>();
