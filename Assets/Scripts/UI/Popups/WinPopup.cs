@@ -10,13 +10,15 @@ public class WinPopup : BasePopup
     private GameController _gameController;
     private UIService _uiService;
     private MenuStateMachine _fsm;
+    private AudioService _audioService;
 
     [Inject]
-    public void Construct(GameController gameController, UIService uiService, MenuStateMachine fsm)
+    public void Construct(GameController gameController, UIService uiService, MenuStateMachine fsm, AudioService audioService)
     {
         _gameController = gameController;
         _uiService = uiService;
         _fsm = fsm;
+        _audioService = audioService;
     }
 
     private new void Awake()
@@ -27,13 +29,14 @@ public class WinPopup : BasePopup
 
     private void OnReplay()
     {
-        //Debug.Log("Replay button clicked");
+        _audioService.PlaySFX("pop");
         _uiService.HideTopPopup();
         _gameController.Restart();
     }
 
     private void OnHome()
     {
+        _audioService.PlaySFX("pop");
         _uiService.HideTopPopup();
         _uiService.PopPanel();
         _fsm.Enter<MainMenuState>();

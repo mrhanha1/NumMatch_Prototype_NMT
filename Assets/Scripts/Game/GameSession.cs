@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class GameSession
 {
@@ -36,16 +35,19 @@ public class GameSession
             for (int c = 0; c < cols; c++)
                 Board[r, c] = new CellModel(r, c, 0);
 
-        InsertNumber(Board, numberString, 0, 0);
+        InsertNumber(numberString, 0, 0);
         OnStageChanged?.Invoke();
         OnAddNumberCountChanged?.Invoke();
     }
 
-    public void InsertNumber(CellModel[,] board, string numberString, int startRow = 0, int startCol = 0)
+    public void InsertNumber(string numberString, int startRow = 0, int startCol = 0)
     {
         var numList = AddNumber.ParseNumberString(numberString);
         var gemList = GemGenerator.GenerateGemList(numberString, GemRequired);
-        int rows = _config.row;
+
+        EnsureCapacityForInsertion(numList.Count, startRow, startCol);
+
+        int rows = Board.GetLength(0);
         int cols = _config.column;
         int i = 0;
 
@@ -54,10 +56,10 @@ public class GameSession
             int cStart = (r == startRow) ? startCol : 0;
             for (int c = cStart; c < cols && i < numList.Count; c++)
             {
-                if (board[r, c].Value == 0 && numList[i] != 0)
+                if (Board[r, c].Value == 0 && numList[i] != 0)
                 {
-                    board[r, c].Value = numList[i];
-                    if (GemMode) board[r, c].GemType = gemList[i];
+                    Board[r, c].Value = numList[i];
+                    if (GemMode) Board[r, c].GemType = gemList[i];
                 }
                 i++;
             }
@@ -66,6 +68,36 @@ public class GameSession
 
     public void SetBoard(CellModel[,] newBoard)
     {
+        Board = newBoard;
+    }
+
+    private void EnsureCapacityForInsertion(int numCount, int startRow, int startCol)
+    {
+        int rows = Board.GetLength(0);
+        int cols = _config.column;
+        int cellsFromStart = (rows - startRow) * cols - startCol;
+
+        if (numCount <= cellsFromStart) return;
+
+        int additionalCells = numCount - cellsFromStart;
+        int requiredRows = rows + (additionalCells + cols - 1) / cols;
+
+        ExpandBoard(requiredRows);
+    }
+
+    private void ExpandBoard(int newRows)
+    {
+        int currentRows = Board.GetLength(0);
+        int cols = Board.GetLength(1);
+
+        if (newRows <= currentRows) return;
+
+        var newBoard = new CellModel[newRows, cols];
+
+        for (int r = 0; r < newRows; r++)
+            for (int c = 0; c < cols; c++)
+                newBoard[r, c] = r < currentRows ? Board[r, c] : new CellModel(r, c, 0);
+
         Board = newBoard;
     }
 
@@ -103,7 +135,7 @@ public class GameSession
                 for (int r2 = r1; r2 < rows; r2++)
                 {
                     int startCol = (r2 == r1) ? c1 : 0;
-                    for (int c2 = startCol; c2 < cols; c2++) // fix: c2 < cols (was startCol < cols)
+                    for (int c2 = startCol; c2 < cols; c2++)
                     {
                         CellModel cellB = Board[r2, c2];
                         if (cellB.Value == 0) break;

@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.Rendering.VirtualTexturing;
+using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
 
@@ -7,15 +7,14 @@ public class GridView : MonoBehaviour
 {
     [SerializeField] private CellView cellViewPrefab;
     [SerializeField] private Transform gridParent;
+    [SerializeField] private ScrollRect scrollRect;
 
-    private GameConfig _config;
     private CellView[,] _cells;
     private IObjectResolver _resolver;
 
     [Inject]
-    public void Construct(GameConfig config, IObjectResolver resolver)
+    public void Construct(IObjectResolver resolver)
     {
-        _config = config;
         _resolver = resolver;
     }
 
@@ -23,8 +22,8 @@ public class GridView : MonoBehaviour
     {
         foreach (Transform child in gridParent) Destroy(child.gameObject);
 
-        int rows = _config.row;
-        int cols = _config.column;
+        int rows = models.GetLength(0);
+        int cols = models.GetLength(1);
         _cells = new CellView[rows, cols];
 
         for (int r = 0; r < rows; r++)
@@ -35,5 +34,15 @@ public class GridView : MonoBehaviour
                 cell.Init(models[r, c]);
                 _cells[r, c] = cell;
             }
+
+        RefreshContentSize();
+        Canvas.ForceUpdateCanvases();
+        scrollRect.verticalNormalizedPosition = 1f;
     }
+
+    public void RefreshContentSize()
+    {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(gridParent as RectTransform);
+    }
+
 }

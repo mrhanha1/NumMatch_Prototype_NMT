@@ -12,14 +12,25 @@ public static class AddNumber
         string activeCells = FindActivedCells(session.Board);
 
         // Find first empty slot and insert active cells there
-        for (int r = 0; r < session.Board.GetLength(0); r++)
-            for (int c = 0; c < session.Board.GetLength(1); c++)
-                if (session.Board[r, c].Value == 0)
-                {
-                    session.InsertNumber(session.Board, activeCells, r, c);
-                    gridView.BuildGrid(session.Board);
-                    return;
-                }
+        var (r, c) = FindFirstEmptyCell(session.Board);
+        if (r >= 0) session.InsertNumber(activeCells, r, c);
+    }
+    public static (int row, int col) FindFirstEmptyCell(CellModel[,] board)
+    {
+        for (int r = 0; r < board.GetLength(0); r++)
+            for (int c = 0; c < board.GetLength(1); c++)
+                if (board[r, c].Value == 0)
+                    return (r, c);
+        return (-1, -1);
+    }
+
+    public static int FindLastRowWithValue(CellModel[,] board)
+    {
+        for (int r = board.GetLength(0) - 1; r >= 0; r--)
+            for (int c = 0; c < board.GetLength(1); c++)
+                if (board[r, c].Value != 0)
+                    return r;
+        return -1;
     }
 
     public static string FindActivedCells(CellModel[,] board)

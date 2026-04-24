@@ -12,14 +12,16 @@ public class MainMenuPanel : BasePanel
     private UIService _uiService;
     private GameplayPanel _gameplayPanel;
     private GameController _controller;
+    private AudioService _audioService;
 
     [Inject]
-    public void Construct(MenuStateMachine fsm, UIService uiService, GameplayPanel gameplayPanel, GameController gameController)
+    public void Construct(MenuStateMachine fsm, UIService uiService, GameplayPanel gameplayPanel, GameController gameController, AudioService audioService)
     {
         _fsm = fsm;
         _uiService = uiService;
         _gameplayPanel = gameplayPanel;
         _controller = gameController;
+        _audioService = audioService;
     }
 
     protected override void Awake()
@@ -27,13 +29,20 @@ public class MainMenuPanel : BasePanel
         base.Awake();
         btnPlay.onClick.AddListener(() =>
         {
+            _audioService.PlaySFX("pop");
             _controller.SetGemMode(false);
             _uiService.PushPanel(_gameplayPanel);
         });
-        btnSetting.onClick.AddListener(() => _fsm.Enter<SettingMenuState>());
+        btnSetting.onClick.AddListener(() =>
+        {
+
+            _audioService.PlaySFX("pop");
+            _fsm.Enter<SettingMenuState>();
+        });
         btnGemMode.onClick.AddListener(() =>
         {
-           _controller.SetGemMode(true);
+            _audioService.PlaySFX("pop");
+            _controller.SetGemMode(true);
             _uiService.PushPanel(_gameplayPanel);
         });
     }

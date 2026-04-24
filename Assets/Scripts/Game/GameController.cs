@@ -48,6 +48,7 @@ public class GameController
     public void AddNumbers()
     {
         AddNumber.Execute(_session, _gridView);
+        _gridView.BuildGrid(_session.Board);
         _session.TriggerAddNumberCountChanged();
     }
 }

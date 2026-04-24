@@ -12,6 +12,7 @@ public class AppLifetimeScope : LifetimeScope
     [SerializeField] private AudioConfig audioConfig;
     [SerializeField] private WinPopup winPopup;
     [SerializeField] private LosePopup losePopup;
+    [SerializeField] private GemRequireView gemRequireView;
 
     protected override void Configure(IContainerBuilder builder)
     {
@@ -23,6 +24,7 @@ public class AppLifetimeScope : LifetimeScope
         builder.RegisterInstance(audioConfig);
         builder.RegisterComponent(winPopup);
         builder.RegisterComponent(losePopup);
+        builder.RegisterComponent(gemRequireView);
 
         builder.Register<UIService>(Lifetime.Singleton);
         builder.Register<MenuStateMachine>(Lifetime.Singleton);
