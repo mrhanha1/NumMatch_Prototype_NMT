@@ -8,6 +8,7 @@ public class GameSession
     public int Stage { get; set; }
     public int AddNumberCount { get; set; }
     public CellModel[,] Board { get; private set; }
+    public List <CellModel> cellList { get; private set; }
 
     public event System.Action OnStageChanged;
     public event System.Action OnAddNumberCountChanged;
@@ -30,6 +31,7 @@ public class GameSession
         int rows = _config.row;
         int cols = _config.column;
         Board = new CellModel[rows, cols];
+        cellList = new List<CellModel>();
 
         for (int r = 0; r < rows; r++)
             for (int c = 0; c < cols; c++)
@@ -59,6 +61,8 @@ public class GameSession
                 if (Board[r, c].Value == 0 && numList[i] != 0)
                 {
                     Board[r, c].Value = numList[i];
+                    var newcell = new CellModel(r, c, numList[i]) { IsActive = true };
+                    cellList.Add(newcell);
                     if (GemMode) Board[r, c].GemType = gemList[i];
                 }
                 i++;

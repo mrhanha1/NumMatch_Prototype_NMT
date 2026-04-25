@@ -10,8 +10,8 @@ public static class PathValidator
         int dy = b.Col - a.Col;
         if (IsSameLine(a, b))
         {
-            int stepR = dx == 0 ? 0 : (dx/Mathf.Abs(dx));
-            int stepC = dy == 0 ? 0 : (dy/Mathf.Abs(dy));
+            int stepR = dx == 0 ? 0 : (dx / Mathf.Abs(dx));
+            int stepC = dy == 0 ? 0 : (dy / Mathf.Abs(dy));
 
             int r = a.Row + stepR;
             int c = a.Col + stepC;

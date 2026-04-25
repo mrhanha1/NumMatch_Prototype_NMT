@@ -14,7 +14,7 @@ public class GameController
 
     public void StartGame()
     {
-        string input = StageGenerator.GenerateStage(32, targetPairCount: 3);
+        string input = "953814187134947876527915838447546856972569653461523292118741564897218632132645316974542558239279633";//StageGenerator.GenerateStage(32, targetPairCount: 3);
         _session.Stage = 1;
         _session.Reset(input);
         _gridView.BuildGrid(_session.Board);

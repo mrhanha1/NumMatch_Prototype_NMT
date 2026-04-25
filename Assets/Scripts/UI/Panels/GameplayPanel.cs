@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
@@ -18,6 +18,8 @@ public class GameplayPanel : BasePanel
     [SerializeField] private Button addNumberButton;
     [SerializeField] private Text stageText;
     [SerializeField] private Text AddNumberCountText;
+
+    [SerializeField] private Button btnTestSolver;
 
     [Header("Gem Require HUD")]
     [SerializeField] private GemRequireView gemRequireView;
@@ -63,6 +65,12 @@ public class GameplayPanel : BasePanel
             _gameController.AddNumbers();
             _audioService.PlaySFX("pop");
         });
+        btnTestSolver.onClick.AddListener(() =>
+        {
+            _audioService.PlaySFX("pop");
+            CellModel[,] testBoard = _session.Board.Clone() as CellModel[,];
+            RunSolver(testBoard);
+        });
     }
 
     private void OnEnable()
@@ -80,4 +88,18 @@ public class GameplayPanel : BasePanel
     private void UpdateStageText() => stageText.text = $"Stage: {_session.Stage}";
     private void UpdateAddNumberCountText() => AddNumberCountText.text = $"{_session.AddNumberCount}";
 
+    public void RunSolver(CellModel[,] board)
+    {
+        List<string> solutions = FiveSolver.Solve(_session.cellList);
+
+        if (solutions.Count == 0)
+        {
+            Debug.Log("Không tìm được lời giải nào.");
+            return;
+        }
+
+        for (int i = 0; i < solutions.Count; i++)
+            Debug.Log($"Lời giải {i + 1}: {solutions[i]}");
+
+    }
 }
