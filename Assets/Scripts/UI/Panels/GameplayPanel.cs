@@ -92,14 +92,18 @@ public class GameplayPanel : BasePanel
     {
         List<string> solutions = FiveSolver.Solve(_session.cellList);
 
+        string path = System.IO.Path.Combine(Application.dataPath, "output.txt");
+
         if (solutions.Count == 0)
         {
             Debug.Log("Không tìm được lời giải nào.");
-            return;
+            System.IO.File.WriteAllText(path, "");
         }
-
-        for (int i = 0; i < solutions.Count; i++)
-            Debug.Log($"Lời giải {i + 1}: {solutions[i]}");
-
+        else
+        {
+            System.IO.File.WriteAllLines(path, solutions);
+            for (int i = 0; i < solutions.Count; i++)
+                Debug.Log($"Lời giải {i + 1}: {solutions[i]}");
+        }
     }
 }

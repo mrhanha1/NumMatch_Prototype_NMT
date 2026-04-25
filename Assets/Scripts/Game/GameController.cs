@@ -1,4 +1,5 @@
-﻿using VContainer;
+﻿using UnityEngine;
+using VContainer;
 
 public class GameController
 {
@@ -14,7 +15,7 @@ public class GameController
 
     public void StartGame()
     {
-        string input = "953814187134947876527915838447546856972569653461523292118741564897218632132645316974542558239279633";//StageGenerator.GenerateStage(32, targetPairCount: 3);
+        string input = LoadInputFromFile() ?? StageGenerator.GenerateStage(32, targetPairCount: 3);
         _session.Stage = 1;
         _session.Reset(input);
         _gridView.BuildGrid(_session.Board);
@@ -50,5 +51,15 @@ public class GameController
         AddNumber.Execute(_session, _gridView);
         _gridView.BuildGrid(_session.Board);
         _session.TriggerAddNumberCountChanged();
+    }
+    private string LoadInputFromFile()
+    {
+        string path = System.IO.Path.Combine(Application.dataPath, "input.txt");
+        if (System.IO.File.Exists(path))
+        {
+            string content = System.IO.File.ReadAllText(path).Trim();
+            if (!string.IsNullOrEmpty(content)) return content;
+        }
+        return null;
     }
 }

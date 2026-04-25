@@ -114,9 +114,9 @@ public class FiveSolver
                 clonedList[secondIdx].IsActive = false;
 
                 // Tạo move string
-                var (r1, c1) = IndexTo2D(firstIdx);
-                var (r2, c2) = IndexTo2D(secondIdx);
-                matchMoves.Add($"{r1},{c1},{r2},{c2}");
+                //var (r1, c1) = IndexTo2D(firstIdx);
+                //var (r2, c2) = IndexTo2D(secondIdx);
+                //matchMoves.Add($"{r1},{c1},{r2},{c2}"); // Move đã được ghi trong TryMatchPair, không cần ghi lại ở đây
 
                 // Đệ quy với các cell còn lại
                 List<int> newRemaining = rest.Where((_, idx) => idx != i).ToList();
@@ -160,6 +160,11 @@ public class FiveSolver
         if (blockerIndices.Count == 0)
         {
             totalCost += 0;
+
+            var (r1, c1) = IndexTo2D(idxA);
+            var (r2, c2) = IndexTo2D(idxB);
+            moves.Add($"{r1},{c1},{r2},{c2}"); //sửa lại
+
             return true;
         }
 
@@ -202,12 +207,16 @@ public class FiveSolver
             workingList[blockerIdx].IsActive = false;
             workingList[neighborIdx].IsActive = false;
 
-            var (r1, c1) = IndexTo2D(blockerIdx);
-            var (r2, c2) = IndexTo2D(neighborIdx);
-            moves.Add($"{r1},{c1},{r2},{c2}");
+            //var (r1, c1) = IndexTo2D(blockerIdx);
+            //var (r2, c2) = IndexTo2D(neighborIdx);
+            //moves.Add($"{r1},{c1},{r2},{c2}");
+            moves.AddRange(subMoves);
 
             subCost += recursiveCost + 1;
         }
+        var (ra, ca) = IndexTo2D(idxA);
+        var (rb, cb) = IndexTo2D(idxB);
+        moves.Add($"{ra},{ca},{rb},{cb}");
 
         totalCost += subCost;
 
@@ -365,8 +374,8 @@ public class FiveSolver
     // Chuyển đổi index 1D sang 2D
     private static (int row, int col) IndexTo2D(int index)
     {
-        int row = index / COLS + 1;
-        int col = index % COLS + 1;
+        int row = index / COLS;
+        int col = index % COLS;
         return (row, col);
     }
 
